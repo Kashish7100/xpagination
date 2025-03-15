@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
+import "./PaginationTable.css";
 
 const PaginationTable = () => {
     const [data, setData] = useState([]);
@@ -21,12 +21,24 @@ const PaginationTable = () => {
     }, []);
 
     const totalPages = Math.ceil(data.length / itemsPerPage);
+
     const startIndex = (currentPage - 1) * itemsPerPage;
     const displayedData = data.slice(startIndex, startIndex + itemsPerPage);
 
+    const handleNext = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(prevPage => prevPage + 1);
+        }
+    };
+
+    const handlePrevious = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prevPage => prevPage - 1);
+        }
+    };
+
     return (
         <div className="pagination-container">
-          <h2>Employee Data Table</h2>
             <table className="pagination-table">
                 <thead>
                     <tr>
@@ -48,18 +60,11 @@ const PaginationTable = () => {
                 </tbody>
             </table>
             <div className="pagination-controls">
-                <button
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                >
+                <button onClick={handlePrevious} disabled={currentPage === 1}>
                     Previous
                 </button>
-                {/* <span> Page {currentPage} of {totalPages} </span> */}
-                <span>{currentPage}</span>
-                <button
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                >
+                <span> Page {currentPage} of {totalPages} </span>
+                <button onClick={handleNext} disabled={currentPage >= totalPages}>
                     Next
                 </button>
             </div>
